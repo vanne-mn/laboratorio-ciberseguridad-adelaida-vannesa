@@ -1,17 +1,29 @@
+
 #!/bin/sh
 
-# Dirección del servidor objetivo en la DMZ
-HOST="https://servidor-web-dmz-ebl.onrender.com"
+HOST="servidor-dmz-adelaida-vannesa.onrender.com"
 
-echo "=== INICIANDO ESCANEO DE PUERTOS Y RECONOCIMIENTO EN LA DMZ ==="
-echo "Analizando puertos comunes..."
+echo "=========================================="
+echo "MODULO 02 - RECONOCIMIENTO DE PUERTOS"
+echo "Laboratorio: Adelaida y Vannesa"
+echo "=========================================="
 
-# Lista de puertos a escanear: 21 (FTP), 22 (SSH), 80 (HTTP), 443 (HTTPS), 8080 (Web Alt), 3306 (MySQL)
-for port in 21 22 80 443 8080 3306; do
-  nc -zv -w 2 $HOST $port 2>&1
-done
+echo "Objetivo autorizado: nuestro servidor DMZ"
+echo "Host: $HOST"
+echo ""
 
-echo "=== ESCANEO DE PUERTOS FINALIZADO ==="
+echo "Comprobando conectividad HTTPS..."
 
-# Mantener el contenedor activo para Render
-python3 -m http.server 8080
+if curl --max-time 10 -s -o /dev/null \
+    -w "Puerto HTTPS 443 - Codigo HTTP: %{http_code}\n" \
+    "https://$HOST"; then
+    echo "Comprobacion HTTPS finalizada."
+else
+    echo "No fue posible completar la solicitud HTTPS."
+fi
+
+echo ""
+echo "=========================================="
+echo "RECONOCIMIENTO FINALIZADO"
+echo "No se realizaron escaneos masivos."
+echo "=========================================="
