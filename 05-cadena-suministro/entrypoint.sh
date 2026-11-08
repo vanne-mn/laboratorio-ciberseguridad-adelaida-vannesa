@@ -1,15 +1,26 @@
+
 #!/bin/sh
 
-echo "=== INICIANDO SERVICIO COMPROMETIDO EN LA CADENA DE SUMINISTRO ==="
-echo "Verificando integridad del contenedor..."
+echo "=========================================="
+echo "MODULO 05 - SEGURIDAD EN LA CADENA DE SUMINISTRO"
+echo "Laboratorio: Adelaida y Vannesa"
+echo "=========================================="
 
-# Verificamos si la dependencia alterada inyectó el script malicioso
+echo "Verificando integridad del contenedor..."
+echo ""
+
+# Comprobar si existe una dependencia sospechosa
 if [ -f "/app/malicious_dependency.sh" ]; then
-  echo "[ALERTA DE SEGURIDAD] Se ha detectado una dependencia no autorizada inyectada durante la construcción del artefacto."
-  sh /app/malicious_dependency.sh
+    echo "[ALERTA DE SEGURIDAD]"
+    echo "Se detecto una dependencia no autorizada."
+    echo "Archivo: /app/malicious_dependency.sh"
+    echo "Accion: archivo identificado, pero NO ejecutado."
 else
-  echo "[OK] Artefacto limpio."
+    echo "[OK] No se detectaron archivos sospechosos."
 fi
 
-# Mantener activo el contenedor
-python3 -m http.server 8080
+echo ""
+echo "=========================================="
+echo "VERIFICACION FINALIZADA"
+echo "No se ejecuto codigo malicioso."
+echo "=========================================="
