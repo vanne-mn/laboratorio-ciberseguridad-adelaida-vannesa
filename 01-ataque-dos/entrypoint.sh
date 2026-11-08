@@ -1,11 +1,24 @@
+
 #!/bin/sh
-TARGET="https://servidor-web-dmz-ebl.onrender.com"
 
-echo "=== SIMULACIÓN: GENERANDO TRÁFICO MASIVO HTTP ==="
-for i in $(seq 1 30); do
-  curl -s -o /dev/null "$TARGET" &
+TARGET="https://servidor-dmz-adelaida-vannesa.onrender.com"
+
+echo "=========================================="
+echo "MODULO 01 - SIMULACION DE TRAFICO HTTP"
+echo "Laboratorio: Adelaida y Vannesa"
+echo "=========================================="
+
+for i in $(seq 1 5); do
+    echo "Solicitud de prueba $i"
+
+    curl --max-time 10 -s -o /dev/null \
+        -w "Codigo HTTP: %{http_code}\n" \
+        "$TARGET"
+
+    sleep 2
 done
-wait
 
-echo "=== PRUEBA FINALIZADA ==="
-python3 -m http.server 8080
+echo "=========================================="
+echo "SIMULACION FINALIZADA"
+echo "Se realizaron 5 solicitudes controladas."
+echo "=========================================="
