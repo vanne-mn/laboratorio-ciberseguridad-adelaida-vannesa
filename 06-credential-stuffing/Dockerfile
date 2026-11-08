@@ -1,13 +1,10 @@
-FROM alpine:latest
 
-# Instalamos curl, bind-tools y python3
-RUN apk add --no-cache curl bind-tools python3
+FROM alpine:3
 
 WORKDIR /app
 
+# Copiar el script de simulacion
 COPY entrypoint.sh /app/entrypoint.sh
-RUN chmod +x /app/entrypoint.sh
 
-EXPOSE 8080
-
-ENTRYPOINT ["/app/entrypoint.sh"]
+# Ejecutar mediante el interprete sh
+CMD ["sh", "/app/entrypoint.sh"]
