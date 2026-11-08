@@ -14,5 +14,5 @@ COPY entrypoint.sh /app/entrypoint.sh
 # Dar permisos de ejecución al verificador
 RUN chmod +x /app/entrypoint.sh
 
-# Ejecutar la verificación de seguridad
-CMD ["/app/entrypoint.sh"]
+# Ejecutar el script utilizando explícitamente el intérprete sh
+CMD ["sh", "/app/entrypoint.sh"]
