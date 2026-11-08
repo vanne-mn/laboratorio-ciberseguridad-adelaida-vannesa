@@ -1,13 +1,16 @@
-FROM alpine:latest
 
-# Instalamos bind-tools (para nslookup/dig), curl y python3
-RUN apk add --no-cache bind-tools curl python3
+FROM alpine:3
+
+# Instalar herramientas para consultas DNS
+RUN apk add --no-cache bind-tools
 
 WORKDIR /app
 
+# Copiar el script de simulación
 COPY entrypoint.sh /app/entrypoint.sh
+
+# Dar permisos de ejecución
 RUN chmod +x /app/entrypoint.sh
 
-EXPOSE 8080
-
-ENTRYPOINT ["/app/entrypoint.sh"]
+# Ejecutar la simulación al iniciar el contenedor
+CMD ["/app/entrypoint.sh"]

