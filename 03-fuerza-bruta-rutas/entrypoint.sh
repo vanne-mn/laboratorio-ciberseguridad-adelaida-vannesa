@@ -1,20 +1,33 @@
+
 #!/bin/sh
 
-# Dirección del servidor objetivo en la DMZ
-TARGET="https://servidor-web-dmz-ebl.onrender.com"
+TARGET="https://servidor-dmz-adelaida-vannesa.onrender.com"
 
-# Diccionario reducido de rutas sensibles para la prueba
-RUTAS="/admin /config.php /login /secret /backup.zip /index.html"
+# Rutas públicas de demostración
+RUTAS="/ /index.html /ruta-publica-demo"
 
-echo "=== INICIANDO ENUMERACIÓN DE RUTAS EN LA DMZ ==="
-echo "Probando peticiones HTTP a rutas conocidas..."
+echo "=========================================="
+echo "MODULO 03 - SIMULACION DE RECONOCIMIENTO"
+echo "Laboratorio: Adelaida y Vannesa"
+echo "=========================================="
+
+echo "Servidor objetivo autorizado: $TARGET"
+echo ""
 
 for ruta in $RUTAS; do
-  CODE=$(curl -o /dev/null -s -w "%{http_code}" "$TARGET$ruta")
-  echo "Ruta probada: $ruta -> Código de respuesta HTTP: $CODE"
+    echo "Consultando ruta: $ruta"
+
+    CODE=$(curl --max-time 10 -s -o /dev/null \
+        -w "%{http_code}" "$TARGET$ruta")
+
+    echo "Codigo de respuesta HTTP: $CODE"
+    echo ""
+
+    sleep 2
 done
 
-echo "=== ENUMERACIÓN DE RUTAS FINALIZADA ==="
-
-# Mantener activo el contenedor para Render
-python3 -m http.server 8080
+echo "=========================================="
+echo "SIMULACION FINALIZADA"
+echo "Se consultaron 3 rutas de demostracion."
+echo "No se accedio a archivos privados."
+echo "=========================================="
