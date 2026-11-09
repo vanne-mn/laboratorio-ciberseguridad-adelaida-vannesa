@@ -1,11 +1,20 @@
-FROM python:alpine
 
-# Forzar a Python a volcar todos los prints a la consola sin esperar
+FROM python:3-alpine
+
+# Mostrar los mensajes inmediatamente en la consola
 ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app
+
+# Copiar la aplicación
 COPY app.py /app/app.py
 
-RUN pip install --no-cache-dir flask requests
+# Instalar Flask
+RUN pip install --no-cache-dir flask
 
+# Puerto de la aplicación
+ENV PORT=8080
+EXPOSE 8080
+
+# Iniciar el servidor
 CMD ["python", "app.py"]

@@ -1,48 +1,99 @@
-from flask import Flask, request, Response
-import requests
+
+from flask import Flask, jsonify
 import os
+from datetime import datetime
 
 app = Flask(__name__)
 
-# URL del servidor objetivo en la DMZ
-TARGET_DMZ = "https://servidor-web-dmz-ebl.onrender.com"
+@app.route("/", methods=["GET"])
+def inicio():
+    print("\n==========================================", flush=True)
+    print("MODULO 07 - SIMULACION PROXY MITM", flush=True)
+    print("Laboratorio: Adelaida y Vannesa", flush=True)
+    print("==========================================", flush=True)
 
-@app.route('/', defaults={'path': ''}, methods=['GET', 'POST', 'PUT', 'DELETE'])
-@app.route('/<path:path>', methods=['GET', 'POST', 'PUT', 'DELETE'])
-def mitm_proxy(path):
-    # 1. Registrar la petición interceptada (Salida inmediata con flush=True)
-    print(f"\n[MITM INTERCEPTADO] Petición entrante hacia la ruta: /{path}", flush=True)
-    print(f"[CABECERAS INTERCEPTADAS] {dict(request.headers)}", flush=True)
+    return """
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Modulo 07 - Proxy MITM</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background: #f1f4f8;
+                margin: 40px;
+                color: #263238;
+            }
+            .contenedor {
+                max-width: 750px;
+                margin: auto;
+                background: white;
+                padding: 30px;
+                border-radius: 12px;
+                box-shadow: 0 3px 12px #0002;
+            }
+            h1 { color: #253b65; }
+            .estado { color: #16834a; font-weight: bold; }
+            .alerta {
+                background: #fff3cd;
+                padding: 15px;
+                border-radius: 8px;
+                color: #795600;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="contenedor">
+            <h1>Modulo 07 - Proxy MITM</h1>
+            <h2>Simulacion educativa</h2>
 
-    # 2. Construir la URL de destino evitando la doble barra '//'
-    url = f"{TARGET_DMZ}/{path}" if path else f"{TARGET_DMZ}/"
+            <p>Laboratorio de Ciberseguridad</p>
+            <p><strong>Integrantes:</strong> Adelaida y Vannesa</p>
 
-    try:
-        # Reenviar la petición HTTP al servidor DMZ
-        if request.method == 'GET':
-            resp = requests.get(url, timeout=5)
-        elif request.method == 'POST':
-            resp = requests.post(url, data=request.form, timeout=5)
-        else:
-            resp = requests.request(request.method, url, timeout=5)
+            <p>Estado del servicio:
+                <span class="estado">ONLINE / ACTIVO</span>
+            </p>
 
-        contenido_original = resp.text
-        status_code = resp.status_code
-    except Exception as e:
-        print(f"[ERROR MITM] No se pudo conectar con la DMZ: {str(e)}", flush=True)
-        contenido_original = f"<h1>Error al conectar con la DMZ</h1><p>{str(e)}</p>"
-        status_code = 502
+            <div class="alerta">
+                <strong>Demostracion controlada:</strong>
+                Este modulo representa el funcionamiento conceptual
+                de un intermediario que puede observar y modificar
+                una comunicacion.
+            </div>
 
-    # 3. Inyección / Alteración de la respuesta (Ataque Man-in-the-Middle)
-    payload_mitm = "\n\n<!-- [ALERTA MITM] Este contenido fue alterado en tránsito por el Proxy Interceptor -->"
-    contenido_alterado = contenido_original + payload_mitm
+            <p>No se intercepta trafico real ni se capturan credenciales.</p>
 
-    print("[MITM ALERTA] Respuesta modificada e inyectada con éxito.", flush=True)
+            <p>
+                <a href="/simulacion">Ejecutar simulacion MITM</a>
+            </p>
+        </div>
+    </body>
+    </html>
+    """
 
-    # 4. Devolver la respuesta alterada al cliente final
-    return Response(contenido_alterado, status=status_code, mimetype='text/html')
+@app.route("/simulacion", methods=["GET"])
+def simulacion():
+    print("[MITM] Solicitud ficticia recibida.", flush=True)
+    print("[MITM] Se analiza una comunicacion de demostracion.", flush=True)
+    print("[MITM] Se simula una alteracion de respuesta.", flush=True)
+    print("[MITM ALERTA] Posible modificacion de informacion en transito.", flush=True)
+    print("[MITM] No se intercepto trafico real.", flush=True)
 
-if __name__ == '__main__':
-    # Usar el puerto de Render si existe o 8080 por defecto
-    port = int(os.environ.get('PORT', 8080))
-    app.run(host='0.0.0.0', port=port)
+    return jsonify({
+        "modulo": "07 - Proxy MITM",
+        "laboratorio": "Adelaida y Vannesa",
+        "tipo": "Simulacion educativa",
+        "solicitud": "Ficticia",
+        "intermediario": "Simulado",
+        "alteracion": "Demostracion conceptual",
+        "alerta": "Posible modificacion de informacion en transito",
+        "trafico_real_interceptado": False,
+        "credenciales_capturadas": False,
+        "fecha": datetime.now().isoformat()
+    })
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 8080))
+    app.run(host="0.0.0.0", port=port)
